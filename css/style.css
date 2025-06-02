@@ -260,5 +260,26 @@ footer {
   display: flex;
 }
 .custom-card {
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.custom-card .d-flex.gap-2.justify-content-center.mt-auto {
+  margin-bottom: 24px; /* Lebih besar agar di desktop juga nyaman */
+}
+
+@media (max-width: 576px) {
+  .custom-card .d-flex.gap-2.justify-content-center.mt-auto {
+    margin-bottom: 16px; /* Sedikit lebih kecil di mobile jika perlu */
+  }
+}
+.custom-card:hover img {
+  transform: scale(1.06) translateY(-8px);
+  box-shadow: 0 12px 32px 0 rgba(0,0,0,0.18), 0 1.5px 6px 0 rgba(0,0,0,0.12);
+  transition: transform 0.3s cubic-bezier(.4,2,.6,1), box-shadow 0.3s;
+}
+
+.custom-card img {
+  transition: transform 0.3s cubic-bezier(.4,2,.6,1), box-shadow 0.3s;
 }
