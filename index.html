@@ -4,38 +4,75 @@
   <meta charset="UTF-8" />
   <title>Flixdz Website</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/mdui@2/mdui.css" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-    <link href="css/nav.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+  <link href="css/nav.css" rel="stylesheet">
 </head>
 <body class="mdui-theme-auto">
-<!-- App Bar -->
+<div style="position: relative; overflow: hidden;">
+<mdui-top-app-bar
+    scroll-behavior="elevate"
+    scroll-target=".main-scroll-content"
+  >
+    <img src="image/flixdz_top.png" alt="flixdz_logo" width="40" style="margin-right:12px; border-radius:8px;">
+    <div style="flex-grow: 1"></div>
+    <mdui-dropdown trigger="click" close-delay="5000">
+      <mdui-button slot="trigger" id="themeDropdownBtn" variant="text">Pilih Warna</mdui-button>
+      <mdui-menu id="themeMenu">
+        <mdui-menu-item data-color="#388e3c">Green</mdui-menu-item>
+        <mdui-menu-item data-color="#795548">Tiramisu</mdui-menu-item>
+        <mdui-menu-item data-color="#1976d2">Blue</mdui-menu-item>
+        <mdui-menu-item data-color="#8e24aa">Purple</mdui-menu-item>
+        <mdui-menu-item data-color="#ba1a1a">Red</mdui-menu-item>
+      </mdui-menu>
+    </mdui-dropdown>
+    <div class="d-flex align-items-center ms-2">
+      <mdui-switch id="darkSwitch">
+        <iconify-icon slot="unchecked-icon" icon="solar:sun-2-line-duotone"></iconify-icon>
+        <iconify-icon slot="checked-icon" icon="solar:moon-line-duotone"></iconify-icon>
+      </mdui-switch>
+    </div>
+  </mdui-top-app-bar>
 
-<div class="container">
-    <!-- Isi halaman -->
+  <div class="main-scroll-content" style="height: 100vh; overflow: auto;">
+    <div class="container">
      <div class="pt-2"><marquee class="fw-bold">Dont forget to subs my Channel :></marquee></div>
-    <div class="text-center">
-        
-        <div style="padding-top: 2em;"></div><br>
-        <img src="image/flixdz.png" alt="flixdz_logo" width="220">
-        <h2 class="fw-bold">Flixdz</h2>
-        <p>Just Minecraft Player <br>
-        <span class="fw-bold text-danger">489 Subs</span></p>
-     </div>
- </div>
 
+    <div class="container text-center mt-4">
+</div>
+<div class="text-center">
+  <div style="padding-top: 2em;"></div><br>
+  <img src="image/flixdz.png" alt="flixdz_logo" width="220">
+  <h2 class="fw-bold">
+    <span id="typed-flixdz"></span>
+  </h2>
+  <p>
+     Hi! I'm <span class="fw-bold text-danger">Flix</span><span class="fw-bold">dz</span>, a passionate Minecraft player and website developer.<br>
+    I love building creative worlds, automating with redstone, and sharing my adventures.<br>
+    As a web developer, I enjoy crafting modern, responsive websites and tools for the gaming community.<br>
+    <span class="text-success">Want to support my journey? Subscribe and stay tuned for more!</span>
+  </p>
+  <p>
+    <span class="fw-bold text-danger">489 Subs</span>
+  </p>
+</div>
+ </div>
+ 
  <div class="container text-center">
-     <mdui-button variant="filled"><span><iconify-icon icon="line-md:youtube-filled" inline></iconify-icon> YouTube</span></mdui-button>
-     <mdui-button variant="filled"><span><iconify-icon icon="line-md:instagram" inline></iconify-icon> Instagram</span></mdui-button>
+
+  
+     <mdui-button variant="filled" href="https://youtube.com/@flixpseal"><span><iconify-icon icon="flowbite:youtube-solid" inline></iconify-icon> YouTube</span></mdui-button>
+     <mdui-button variant="filled" href="https://instagram.com/flixpseal"><span><iconify-icon icon="hugeicons:instagram" inline></iconify-icon> Instagram</span></mdui-button>
+     <mdui-button variant="filled" href="https://sociabuzz.com/flixpseal/tribe"><span><iconify-icon icon="streamline-sharp:give-gift-solid" inline></iconify-icon>  Support</span></mdui-button>
  </div>
     <div class="container text-center">
 
     <div class="container my-4">
   <div class="row justify-content-center">
-    <div class="col-md-4 mb-4">
+    <div class="col-md-6 mb-4">
       <mdui-card class="custom-card" variant="filled" style="padding-bottom:16px;">
         <img src="image/6192941884616331533_121.jpg" alt="Gambar 1" style="width:100%;height:auto; margin-bottom:16px;">
         <mdui-card-header style="margin-bottom:8px;">
@@ -46,44 +83,100 @@
         <mdui-card-content style="display:block; margin-bottom:12px;">
           <p>Unlocker for Minecraft Windows <sup><mdui-badge>v1</mdui-badge></sup></p>
         <div class="d-flex gap-2 justify-content-center">
-          <mdui-button variant="filled">Direct Link</mdui-button>
-          <mdui-button variant="filled">Donate</mdui-button>
+           <mdui-button variant="filled" onclick="confirm('Pay with like n subs :>')" href="https://sub4unlock.co/j6Gt">Direct Link</mdui-button>
+          <mdui-button variant="filled" href="https://sfl.gl/Ld7aX9T">Ads Link</mdui-button>
         </div>
       </mdui-card>
     </div>
     
-    <!-- 2 -->
-    <div class="col-md-4 mb-4">
+    <div class="col-md-6 mb-4">
       <mdui-card class="custom-card" variant="filled" style="padding-bottom:16px;">
         <img src="image/6192941884616331536_121.jpg" alt="Gambar 1" style="width:100%;height:auto; margin-bottom:16px;">
         <mdui-card-header style="margin-bottom:8px;">
           <mdui-card-title>
-            <span class="h2 fw-bold" style="display:block; margin-bottom:5px;">Flixdz Unlocker</span>
+            <span class="h2 fw-bold" style="display:block; margin-bottom:5px;">Minecraft CMD</span>
           </mdui-card-title>
         </mdui-card-header>
         <mdui-card-content>
           <p>CMD & iObit Unlocker for MC Windows <sup><mdui-badge class="eol">EOL</mdui-badge></sup></p>
         </mdui-card-content>
         <div class="d-flex gap-2 justify-content-center">
-          <mdui-button variant="filled">Direct Link</mdui-button>
-          <mdui-button variant="filled">Donate</mdui-button>
+          <mdui-button variant="filled" onclick="confirm('Pay with like n subs :>')" href="https://sub4unlock.co/oq7jW">Direct Link</mdui-button>
+          <mdui-button variant="filled" href="https://sfl.gl/8d7M2oIJ">Ads Link</mdui-button>
         </div>
       </mdui-card>
     </div>
 
   </div>
 </div>
-
   <script src="https://unpkg.com/mdui@2/mdui.global.js"></script>
- <script>
-  // Set tema default biru saat halaman load
-  mdui.setColorScheme('#ba1a1a', {
-    target: document.documentElement
+<script>
+  let currentColor = localStorage.getItem('themeColor') || '#ba1a1a';
+  let currentLabel = localStorage.getItem('themeLabel') || 'Red';
+
+  function setTheme(color, label) {
+    currentColor = color;
+    currentLabel = label;
+    mdui.setColorScheme(color, { target: document.documentElement });
+    mdui.setColorScheme('#000fff', { target: document.querySelector('.eol') });
+    document.getElementById('themeDropdownBtn').innerText = label;
+    localStorage.setItem('themeColor', color);
+    localStorage.setItem('themeLabel', label);
+  }
+
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const darkSwitch = document.getElementById('darkSwitch');
+  if (prefersDark) {
+    darkSwitch.checked = true;
+    document.body.className = 'mdui-theme-auto';
+    document.documentElement.className = 'mdui-theme-auto';
+  } else {
+    darkSwitch.checked = false;
+    document.body.className = '';
+    document.documentElement.className = '';
+  }
+
+  setTheme(currentColor, currentLabel);
+
+  document.querySelectorAll('#themeMenu mdui-menu-item').forEach(function(item) {
+    item.addEventListener('click', function() {
+      setTheme(this.getAttribute('data-color'), this.innerText);
+    });
   });
-  mdui.setColorScheme('#000fff', {
-    target: document.querySelector('.eol')
+
+  darkSwitch.addEventListener('change', function() {
+    if (this.checked) {
+      document.body.className = 'mdui-theme-auto';
+      document.documentElement.className = 'mdui-theme-auto';
+    } else {
+      document.body.className = '';
+      document.documentElement.className = '';
+    }
+    setTheme(currentColor, currentLabel);
   });
 </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    new Typed("#typed-flixdz", {
+      strings: [
+        "&lt;span class='fw-bold text-danger'&gt;Flix&lt;/span&gt;&lt;span class='fw-bold'&gt;dz&lt;/span&gt;^200"
+      ],
+      typeSpeed: 40,
+      backSpeed: 0,
+      fadeOut: true,
+      fadeOutDelay: 200,
+      showCursor: true,
+      cursorChar: '|',
+      loop: false,
+      onComplete: function() {
+        setTimeout(function() {
+          document.getElementById('typed-flixdz').innerHTML = "<span class='fw-bold text-danger'>Flix</span><span class='fw-bold'>dz</span>";
+        }, 500);
+      }
+    });
+  });
+</script>
 </body>
 </html>
