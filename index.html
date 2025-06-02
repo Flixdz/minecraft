@@ -4,12 +4,20 @@
   <meta charset="UTF-8" />
   <title>Flixdz Website</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+  <script src="https://code.iconify.design/iconify-icon/3.0.0/iconify-icon.min.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/mdui@2/mdui.css" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
   <link href="css/nav.css" rel="stylesheet">
+  <style>
+    iconify-icon {
+  display: inline-block;
+  vertical-align: middle;
+  width: 1em;
+  height: 1em;
+}
+  </style>
 </head>
 <body class="mdui-theme-auto">
 <div style="position: relative; overflow: hidden;">
@@ -74,7 +82,7 @@
       font-weight: bold;
       font-size: 1.1rem;
       pointer-events: none;
-      "><mdui-button variant="text">490</mdui-button></span>
+      "><mdui-button variant="text">492</mdui-button></span>
   </div>
   <span class="small mt-1 text-secondary">Goal: 1000 Subs</span>
 </p>
@@ -130,6 +138,8 @@
 
   </div>
 </div>
+    </div>
+  
   <script src="https://unpkg.com/mdui@2/mdui.global.js"></script>
 <script>
   let currentColor = localStorage.getItem('themeColor') || '#ba1a1a';
@@ -145,41 +155,39 @@
     localStorage.setItem('themeLabel', label);
   }
 
+  function setDarkMode(isDark) {
+  // Hapus semua class tema dulu
+  document.body.classList.remove('mdui-theme-dark', 'mdui-theme-light', 'mdui-theme-auto');
+  document.documentElement.classList.remove('mdui-theme-dark', 'mdui-theme-light', 'mdui-theme-auto');
+  if (isDark) {
+    document.body.classList.add('mdui-theme-dark');
+    document.documentElement.classList.add('mdui-theme-dark');
+    localStorage.setItem('darkMode', 'true');
+  } else {
+    document.body.classList.add('mdui-theme-light');
+    document.documentElement.classList.add('mdui-theme-light');
+    localStorage.setItem('darkMode', 'false');
+  }
+}
+
   const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   const darkSwitch = document.getElementById('darkSwitch');
 
-  // Ambil preferensi dark mode dari localStorage jika ada
+  // Inisialisasi awal
   let savedDark = localStorage.getItem('darkMode');
   if (savedDark !== null) {
-    if (savedDark === 'true') {
-      darkSwitch.checked = true;
-      document.body.classList.remove('mdui-theme-light');
-      document.body.classList.add('mdui-theme-dark');
-      document.documentElement.classList.remove('mdui-theme-light');
-      document.documentElement.classList.add('mdui-theme-dark');
-    } else {
-      darkSwitch.checked = false;
-      document.body.classList.remove('mdui-theme-dark');
-      document.body.classList.add('mdui-theme-light');
-      document.documentElement.classList.remove('mdui-theme-dark');
-      document.documentElement.classList.add('mdui-theme-light');
-    }
+    darkSwitch.checked = savedDark === 'true';
+    setDarkMode(darkSwitch.checked);
   } else {
-    // Default: ikuti preferensi perangkat
-    if (prefersDark) {
-      darkSwitch.checked = true;
-      document.body.classList.remove('mdui-theme-light');
-      document.body.classList.add('mdui-theme-dark');
-      document.documentElement.classList.remove('mdui-theme-light');
-      document.documentElement.classList.add('mdui-theme-dark');
-    } else {
-      darkSwitch.checked = false;
-      document.body.classList.remove('mdui-theme-dark');
-      document.body.classList.add('mdui-theme-light');
-      document.documentElement.classList.remove('mdui-theme-dark');
-      document.documentElement.classList.add('mdui-theme-light');
-    }
+    darkSwitch.checked = prefersDark;
+    setDarkMode(prefersDark);
   }
+
+  // Event listener switch
+  darkSwitch.addEventListener('change', function() {
+    setDarkMode(this.checked);
+    setTheme(currentColor, currentLabel);
+  });
 
   setTheme(currentColor, currentLabel);
 
