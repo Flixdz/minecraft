@@ -74,7 +74,7 @@
       font-weight: bold;
       font-size: 1.1rem;
       pointer-events: none;
-      "><mdui-button variant="text">491</mdui-button></span>
+      "><mdui-button variant="text">490</mdui-button></span>
   </div>
   <span class="small mt-1 text-secondary">Goal: 1000 Subs</span>
 </p>
@@ -147,14 +147,38 @@
 
   const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   const darkSwitch = document.getElementById('darkSwitch');
-  if (prefersDark) {
-    darkSwitch.checked = true;
-    document.body.className = 'mdui-theme-auto';
-    document.documentElement.className = 'mdui-theme-auto';
+
+  // Ambil preferensi dark mode dari localStorage jika ada
+  let savedDark = localStorage.getItem('darkMode');
+  if (savedDark !== null) {
+    if (savedDark === 'true') {
+      darkSwitch.checked = true;
+      document.body.classList.remove('mdui-theme-light');
+      document.body.classList.add('mdui-theme-dark');
+      document.documentElement.classList.remove('mdui-theme-light');
+      document.documentElement.classList.add('mdui-theme-dark');
+    } else {
+      darkSwitch.checked = false;
+      document.body.classList.remove('mdui-theme-dark');
+      document.body.classList.add('mdui-theme-light');
+      document.documentElement.classList.remove('mdui-theme-dark');
+      document.documentElement.classList.add('mdui-theme-light');
+    }
   } else {
-    darkSwitch.checked = false;
-    document.body.className = '';
-    document.documentElement.className = '';
+    // Default: ikuti preferensi perangkat
+    if (prefersDark) {
+      darkSwitch.checked = true;
+      document.body.classList.remove('mdui-theme-light');
+      document.body.classList.add('mdui-theme-dark');
+      document.documentElement.classList.remove('mdui-theme-light');
+      document.documentElement.classList.add('mdui-theme-dark');
+    } else {
+      darkSwitch.checked = false;
+      document.body.classList.remove('mdui-theme-dark');
+      document.body.classList.add('mdui-theme-light');
+      document.documentElement.classList.remove('mdui-theme-dark');
+      document.documentElement.classList.add('mdui-theme-light');
+    }
   }
 
   setTheme(currentColor, currentLabel);
@@ -167,11 +191,17 @@
 
   darkSwitch.addEventListener('change', function() {
     if (this.checked) {
-      document.body.className = 'mdui-theme-auto';
-      document.documentElement.className = 'mdui-theme-auto';
+      document.body.classList.remove('mdui-theme-light');
+      document.body.classList.add('mdui-theme-dark');
+      document.documentElement.classList.remove('mdui-theme-light');
+      document.documentElement.classList.add('mdui-theme-dark');
+      localStorage.setItem('darkMode', 'true');
     } else {
-      document.body.className = '';
-      document.documentElement.className = '';
+      document.body.classList.remove('mdui-theme-dark');
+      document.body.classList.add('mdui-theme-light');
+      document.documentElement.classList.remove('mdui-theme-dark');
+      document.documentElement.classList.add('mdui-theme-light');
+      localStorage.setItem('darkMode', 'false');
     }
     setTheme(currentColor, currentLabel);
   });
