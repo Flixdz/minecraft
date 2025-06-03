@@ -272,10 +272,10 @@ async function getSubscribers() {
     // Badge logic hanya icon, pakai badge MDUI
     if (lastSubs !== null && count !== lastSubs) {
       if (count > lastSubs) {
-        subsChangeBadge.innerHTML = '<mdui-badge color="success" style="padding:2px 6px;"><iconify-icon icon="mdi:arrow-up-bold" width="16" height="16"></iconify-icon></mdui-badge>';
+        subsChangeBadge.innerHTML = '<mdui-badge color="success" style="padding:2px 6px;"><iconify-icon icon="mdi:arrow-up-bold" inline></iconify-icon></mdui-badge>';
         subsChangeBadge.style.display = 'inline-block';
       } else if (count < lastSubs) {
-        subsChangeBadge.innerHTML = '<mdui-badge color="error" style="padding:2px 6px;"><iconify-icon icon="mdi:arrow-down-bold" width="16" height="16"></iconify-icon></mdui-badge>';
+        subsChangeBadge.innerHTML = '<mdui-badge color="error" style="padding:2px 6px;"><iconify-icon icon="mdi:arrow-down-bold" inline></iconify-icon></mdui-badge>';
         subsChangeBadge.style.display = 'inline-block';
       }
       setTimeout(() => { subsChangeBadge.style.display = 'none'; }, 2500);
