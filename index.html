@@ -264,7 +264,7 @@ async function getSubscribers() {
     document.getElementById('subsProgress').setAttribute('value', progress);
   } catch (error) {
     console.error('Error fetching subscriber count:', error);
-    document.getElementById('subscriberCount').innerText = 'Error Counting Subscriber, please refresh page';
+    document.getElementById('subscriberCount').innerText = 'Error, please refresh page';
     document.getElementById('subsProgress').setAttribute('value', 0);
   }
 }
