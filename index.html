@@ -96,7 +96,7 @@
           z-index: 2;
         "></span>
       </div>
-      <span class="small mt-1 text-secondary">Goal: 1000 Subs</span>
+      <span class="small mt-1 text-secondary">Goal: 2000 Subs</span>
     </p>
 </div>
 </center>
@@ -286,7 +286,7 @@ async function getSubscribers() {
     subscriberCountEl.innerText = count.toLocaleString();
 
     // Update progress bar
-    const progress = Math.min(count / 1000, 1);
+    const progress = Math.min(count / 2000, 1);
     subsProgressEl.setAttribute('value', progress);
   } catch (error) {
     subscriberCountEl.innerText = 'Error Counting Subscriber, please refresh page';
