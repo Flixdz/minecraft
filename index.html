@@ -250,16 +250,25 @@
   });
 </script>
 <script>
-// this api key is my fake account, if you want to use. just use fake accounts lol
 const apiKey = 'AIzaSyC_HmMiJpGMyalqFHhUSd80TqRN6dw3se0';
 const channelId = 'UCzU0mlmLis0p2XOvRL1r0-Q';
 
 let intervalId = null;
-let intervalMs = 15000; // muat ulang saat 15 detik untuk menghemat bandwidth
+let intervalMs = 15000;
 let lastSubs = null;
+
 const subscriberCountEl = document.getElementById('subscriberCount');
 const subsProgressEl = document.getElementById('subsProgress');
 const subsChangeBadge = document.getElementById('subsChangeBadge');
+
+// Format number to K, cuz yt doesnt allow me to use 1002
+function formatToK(num) {
+  if (num < 1000) return num.toString();
+  const result = num / 1000;
+  return result % 1 === 0
+    ? result.toFixed(0) + 'K'
+    : result.toFixed(1) + 'K';
+}
 
 async function getSubscribers() {
   try {
@@ -269,7 +278,6 @@ async function getSubscribers() {
     const data = await response.json();
     const count = parseInt(data.items[0].statistics.subscriberCount, 10);
 
-    // Badge logic hanya icon, pakai badge MDUI
     if (lastSubs !== null && count !== lastSubs) {
       if (count > lastSubs) {
         subsChangeBadge.innerHTML = '<mdui-badge color="success" style="padding:2px 6px;"><iconify-icon icon="mdi:arrow-up-bold" inline></iconify-icon></mdui-badge>';
@@ -280,16 +288,18 @@ async function getSubscribers() {
       }
       setTimeout(() => { subsChangeBadge.style.display = 'none'; }, 2500);
     }
+
     lastSubs = count;
 
-    // Update angka di tengah circular
-    subscriberCountEl.innerText = count.toLocaleString();
+    // Show wrapped count
+    subscriberCountEl.innerText = formatToK(count);
 
     // Update progress bar
     const progress = Math.min(count / 2000, 1);
     subsProgressEl.setAttribute('value', progress);
+    
   } catch (error) {
-    subscriberCountEl.innerText = 'Error Counting Subscriber, please refresh page';
+    subscriberCountEl.innerText = 'Error';
     subsProgressEl.setAttribute('value', 0);
   }
 }
@@ -301,16 +311,16 @@ function startInterval() {
 
 document.addEventListener('visibilitychange', function() {
   if (document.visibilityState === 'visible') {
-    getSubscribers(); // update segera saat tab aktif
+    getSubscribers();
     startInterval();
   } else {
-    if (intervalId) clearInterval(intervalId); // hentikan interval saat tab tidak aktif
+    if (intervalId) clearInterval(intervalId);
   }
 });
 
-// Mulai interval saat halaman pertama kali dibuka
 getSubscribers();
 startInterval();
 </script>
+
 </body>
 </html>
