@@ -102,13 +102,18 @@
 </center>
  </div>
  
- <div class="container text-center">
+    <div class="container text-center">
 
   
      <mdui-button variant="filled" href="https://youtube.com/@flixpseal"><span><iconify-icon icon="flowbite:youtube-solid" inline></iconify-icon> YouTube</span></mdui-button>
      <mdui-button variant="filled" href="https://instagram.com/flixpseal"><span><iconify-icon icon="hugeicons:instagram" inline></iconify-icon> Instagram</span></mdui-button>
      <mdui-button variant="filled" href="https://sociabuzz.com/flixpseal/tribe"><span><iconify-icon icon="streamline-sharp:give-gift-solid" inline></iconify-icon>  Support</span></mdui-button>
- </div>
+    </div>
+    <div class="container text-center mt-2">
+      <a href="https://modsfire.com" target="_blank" rel="noopener" style="text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
+      <img src="https://modsfire.com/assets/images/logo-n.png" alt="ModsFire" style="height:20px; width:auto;" />
+      </a>
+    </div>
     <div class="container text-center">
 
     <div class="container my-4">
@@ -142,7 +147,7 @@
           <p>CMD & iObit Unlocker for MC Windows <sup><mdui-badge class="eol">EOL</mdui-badge></sup></p>
         </mdui-card-content>
         <div class="d-flex gap-2 justify-content-center">
-          <mdui-button variant="filled" onclick="confirm('Pay with like n subs :>')" href="https://sub4unlock.co/oq7jW">Direct Link</mdui-button>
+          <mdui-button variant="filled" onclick="confirm('Pay with like n subs :>')" href="https://sub4unlock.co/ff3o">Direct Link</mdui-button>
           <mdui-button variant="filled" href="https://sfl.gl/8d7M2oIJ">Ads Link</mdui-button>
         </div>
       </mdui-card>
@@ -250,7 +255,6 @@
   });
 </script>
 <script>
-const apiKey = 'AIzaSyC_HmMiJpGMyalqFHhUSd80TqRN6dw3se0';
 const channelId = 'UCzU0mlmLis0p2XOvRL1r0-Q';
 
 let intervalId = null;
@@ -260,43 +264,125 @@ let lastSubs = null;
 const subscriberCountEl = document.getElementById('subscriberCount');
 const subsProgressEl = document.getElementById('subsProgress');
 const subsChangeBadge = document.getElementById('subsChangeBadge');
+let displayMode = 'est'; // 'est' | 'api'
+let lastEst = null; // last est_sub numeric
+let lastApi = null; // last API_sub numeric
 
-// Format number to K, cuz yt doesnt allow me to use 1002
-function formatToK(num) {
-  if (num < 1000) return num.toString();
-  const result = num / 1000;
-  return result % 1 === 0
-    ? result.toFixed(0) + 'K'
-    : result.toFixed(1) + 'K';
+function formatFullNumber(num) {
+  try {
+    return Number(num).toLocaleString('en-US');
+  } catch (_) {
+    return String(num);
+  }
+}
+
+function formatApiShort(num) {
+  const n = Number(num);
+  if (!Number.isFinite(n)) return 'N/A';
+  if (n >= 1e6) {
+    return (n / 1e6).toFixed(2).replace('.', ',');
+  }
+  if (n >= 1e3) {
+    return (n / 1e3).toFixed(2).replace('.', ',');
+  }
+  return n.toString();
+}
+
+function parseAbbreviatedCount(value) {
+  if (typeof value === 'number') return Math.round(value);
+  if (typeof value !== 'string') return NaN;
+  const s = value.trim().toLowerCase();
+  const match = s.match(/^([0-9]+(?:[.,][0-9]+)?)\s*([kmb])$/i);
+  if (match) {
+    const numPart = parseFloat(match[1].replace(',', '.'));
+    const suffix = match[2].toLowerCase();
+    const factor = suffix === 'k' ? 1e3 : suffix === 'm' ? 1e6 : 1e9;
+    return Math.round(numPart * factor);
+  }
+  const digitsOnly = s.replace(/[^0-9]/g, '');
+  if (digitsOnly) return parseInt(digitsOnly, 10);
+  return NaN;
+}
+
+function pickFirstValidNumber(values) {
+  for (const v of values) {
+    if (v === undefined || v === null) continue;
+    const parsed = parseAbbreviatedCount(v);
+    if (Number.isFinite(parsed) && parsed > 0) return parsed;
+  }
+  return NaN;
+}
+
+function get(obj, path) {
+  return path.split('.').reduce((acc, key) => (acc && acc[key] !== undefined ? acc[key] : undefined), obj);
+}
+
+function extractSubscriberCount(data) {
+  const candidates = [
+    get(data, 'subscriberCount'),
+    get(data, 'count'),
+    get(data, 'counts.subscriberCount'),
+    get(data, 'statistics.subscriberCount'),
+    get(data, 'stats.subscribers'),
+    get(data, 'stats.subscriberCount'),
+    get(data, 'youtube.channel.stats.subscribers'),
+    get(data, 'youtube.channel.subscriberCount'),
+    get(data, 'items.0.statistics.subscriberCount'),
+    get(data, 'data.counts.subscriberCount'),
+    get(data, 'data.subscriberCount'),
+    get(data, 'channel.subscriberCount'),
+  ];
+  return pickFirstValidNumber(candidates);
+}
+
+function renderSubscriberDisplay() {
+  const raw = (displayMode === 'api' && Number.isFinite(lastApi))
+    ? lastApi
+    : (Number.isFinite(lastEst) ? lastEst : NaN);
+  if (!Number.isFinite(raw)) {
+    subscriberCountEl.innerText = '...';
+    subsProgressEl.setAttribute('value', 0);
+    return;
+  }
+  if (displayMode === 'api') {
+    subscriberCountEl.innerText = formatApiShort(raw);
+  } else {
+    subscriberCountEl.innerText = formatFullNumber(raw);
+  }
+  const progress = Math.min(raw / 2000, 1);
+  subsProgressEl.setAttribute('value', progress);
 }
 
 async function getSubscribers() {
   try {
-    const response = await fetch(
-      `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${channelId}&key=${apiKey}`
-    );
+    const response = await fetch(`https://api.socialcounts.org/youtube-live-subscriber-count/${channelId}`);
     const data = await response.json();
-    const count = parseInt(data.items[0].statistics.subscriberCount, 10);
+    const estRaw = pickFirstValidNumber([ data && data.est_sub ]);
+    const apiRaw = pickFirstValidNumber([ data && data.API_sub ]);
+    const fallbackRaw = extractSubscriberCount(data);
 
-    if (lastSubs !== null && count !== lastSubs) {
-      if (count > lastSubs) {
+    if (Number.isFinite(estRaw)) lastEst = estRaw; else if (Number.isFinite(fallbackRaw)) lastEst = fallbackRaw;
+    if (Number.isFinite(apiRaw)) lastApi = apiRaw;
+
+    const selectedNow = (displayMode === 'api' && Number.isFinite(lastApi))
+      ? lastApi
+      : (Number.isFinite(lastEst) ? lastEst : fallbackRaw);
+
+    if (!Number.isFinite(selectedNow)) throw new Error('Invalid subscriber count');
+
+    if (lastSubs !== null && selectedNow !== lastSubs) {
+      if (selectedNow > lastSubs) {
         subsChangeBadge.innerHTML = '<mdui-badge color="success" style="padding:2px 6px;"><iconify-icon icon="mdi:arrow-up-bold" inline></iconify-icon></mdui-badge>';
         subsChangeBadge.style.display = 'inline-block';
-      } else if (count < lastSubs) {
+      } else if (selectedNow < lastSubs) {
         subsChangeBadge.innerHTML = '<mdui-badge color="error" style="padding:2px 6px;"><iconify-icon icon="mdi:arrow-down-bold" inline></iconify-icon></mdui-badge>';
         subsChangeBadge.style.display = 'inline-block';
       }
       setTimeout(() => { subsChangeBadge.style.display = 'none'; }, 2500);
     }
+    lastSubs = selectedNow;
 
-    lastSubs = count;
-
-    // Show wrapped count
-    subscriberCountEl.innerText = formatToK(count);
-
-    // Update progress bar
-    const progress = Math.min(count / 2000, 1);
-    subsProgressEl.setAttribute('value', progress);
+    renderSubscriberDisplay();
     
   } catch (error) {
     subscriberCountEl.innerText = 'Error';
@@ -320,6 +406,17 @@ document.addEventListener('visibilitychange', function() {
 
 getSubscribers();
 startInterval();
+</script>
+
+<script>
+// Toggle display mode on click: default est_sub full, click -> API_sub short
+subscriberCountEl.style.cursor = 'pointer';
+subscriberCountEl.title = 'Click to switch count mode';
+subscriberCountEl.style.pointerEvents = 'auto';
+subscriberCountEl.addEventListener('click', function() {
+  displayMode = displayMode === 'api' ? 'est' : 'api';
+  renderSubscriberDisplay();
+});
 </script>
 
 </body>
